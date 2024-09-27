@@ -17,7 +17,7 @@ const blueClick = () => {
 const HomePage: React.FC = () => {
     return (
         <>
-            <span className="text-red-800">Get started by editing BURGERS</span>
+            <span className="text-red-800">Get started by editing</span>
             <Button text="Hall Of Fame" color='blue' onClick={blueClick}></Button>
             <Button text="None" color='red' onClick={redClick}></Button>
             <Button text="Whaaaaa" color='green' onClick={greenClick}></Button>
