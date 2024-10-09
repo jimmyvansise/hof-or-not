@@ -1,5 +1,5 @@
 'use client'
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useCallback, useState} from 'react';
 import Button from '../components/button';
 import { getPlayer } from '../api/players';
 
@@ -16,29 +16,43 @@ const greenClick = () => {
 }
 
 const HomePage: React.FC = () => {
-  const [data, setData] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState<Player | null>(null);
+
+  const fetchData = useCallback(async () => {
+    setIsLoading(true);
+
+    try {
+      const player = await getPlayer(4);
+
+      setData(player);
+    } catch (error) {
+      console.error('Error fetching player data:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const myData = await getPlayer(1);
-
-        setData(myData);
-      } catch (error) {
-        console.error('Error fetching player data:', error);
-      }
-    };
-
     fetchData();
   }, []);
-  console.log('data here', data);
 
   return (
       <>
-          <span className="text-red-800">Get started by editing</span>
-          <Button text="Hall Of Fame" color='blue' onClick={blueClick}></Button>
-          <Button text="None" color='red' onClick={redClick}></Button>
-          <Button text="Whaaaaa" color='green' onClick={greenClick}></Button>
+        <div>
+          { isLoading ? <span>Loading...</span> 
+          : 
+          <div>
+            <span className="text-red-800">Firstname: {data?.firstName} </span>
+            <span className="text-red-800">Lastname: {data?.lastName} </span>
+            <span className="text-red-800">Nickname: {data?.nickname} </span>
+            <span className="text-red-800">Year Retired: {data?.yearRetired} </span>
+          </div> 
+          }
+        </div>
+        <Button text="Hall Of Fame" color='blue' onClick={blueClick}></Button>
+        <Button text="None" color='red' onClick={redClick}></Button>
+        <Button text="Whaaaaa" color='green' onClick={greenClick}></Button>
       </>
   );
 }
