@@ -1,5 +1,4 @@
-
-const baseAddress = 'http://localhost:8080/players';
+const baseAddress = `${process.env.NEXT_PUBLIC_API_URL}/players`;
 
 export const getPlayer = async (playerId: number): Promise<Player> => {
     const response = await fetch(`${baseAddress}/${playerId}`);
