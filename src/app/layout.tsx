@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "HOF or Not",
-  description: "WIP Mystery Project",
+  description: "Who should make the NFL HOF???",
 };
 
 export default function RootLayout({

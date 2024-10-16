@@ -2,6 +2,7 @@
 import React, {useEffect, useCallback, useState} from 'react';
 import Button from '../components/button';
 import { getPlayer } from '../api/players';
+import { PlayerState } from './player-state';
 
 const createUniqueRandomArray = (n: number) : number[] => {
   const numbers: number[] = [];
@@ -35,49 +36,66 @@ const formatNickname = (nickname: string) => {
 }
 
 const HomePage: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [currentPlayerIdx, setPlayerIdx] = useState(0);
-  const [data, setData] = useState<Player | null>(null);
+  const [playerState, setPlayerState] = useState<PlayerState>({
+    isLoading: true,
+    currentPlayerIdx: 0,
+    data: null,
+  });
 
   const redClick = () => {
     console.log('RED');
-    setPlayerIdx(getNextIdx(currentPlayerIdx));
+    setPlayerState((prevState) => ({
+      ...prevState,
+      currentPlayerIdx: getNextIdx(playerState.currentPlayerIdx),
+    }));
   }
   
   const greenClick = () => {
     console.log('GREEN');
-    setPlayerIdx(getNextIdx(currentPlayerIdx));
+    setPlayerState((prevState) => ({
+      ...prevState,
+      currentPlayerIdx: getNextIdx(playerState.currentPlayerIdx),
+    }));
   }
 
   const fetchData = useCallback(async () => {
-    setIsLoading(true);
+    setPlayerState((prevState) => ({
+      ...prevState,
+      isLoading: true,
+    }));
 
     try {
-      console.log('hi', currentPlayerIdx);
-      const player = await getPlayer(randomPlayers[currentPlayerIdx]);
+      console.log('grabbing player at idx', playerState.currentPlayerIdx);
+      const player = await getPlayer(randomPlayers[playerState.currentPlayerIdx]);
 
-      setData(player);
+      setPlayerState((prevState) => ({
+        ...prevState,
+        data: player,
+      }));
     } catch (error) {
       console.error('Error fetching player data:', error);
     } finally {
-      setIsLoading(false);
+      setPlayerState((prevState) => ({
+        ...prevState,
+        isLoading: false,
+      }));
     }
-  }, [currentPlayerIdx]);
+  }, [playerState.currentPlayerIdx]);
 
   useEffect(() => {
     fetchData();
-  }, [currentPlayerIdx]);
+  }, [fetchData]);
 
   return (
       <div className='flex flex-col items-center'>
         <div className='p-10 border-2 border-black'>
           <div>
-            { isLoading ? <span>Loading...</span> 
+            { playerState.isLoading ? <span>Loading...</span> 
             : 
             <div className='flex flex-col'>
-              <span className="text-blue-900">{data?.firstName.toUpperCase()} {data?.lastName.toUpperCase()}</span>
-              <span className="text-red-800">{data ? formatNickname(data.nickname) : ''} </span>
-              <span className="text-red-800">Year Retired: {data?.yearRetired} </span>
+              <span className="text-blue-900">{playerState.data?.firstName.toUpperCase()} {playerState.data?.lastName.toUpperCase()}</span>
+              <span className="text-red-800">{playerState.data ? formatNickname(playerState.data.nickname) : ''} </span>
+              <span className="text-red-800">Year Retired: {playerState.data?.yearRetired} </span>
             </div> 
             }
           </div>
