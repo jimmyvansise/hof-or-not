@@ -4,6 +4,8 @@ import Button from '../components/button';
 import { getPlayer } from '../api/players';
 import { PlayerState } from './player-state';
 
+const UI_TEST_ONLY = true;
+
 const createUniqueRandomArray = (n: number) : number[] => {
   const numbers: number[] = [];
   const shuffledNumbers: number[] = [];
@@ -42,43 +44,46 @@ const HomePage: React.FC = () => {
     data: null,
   });
 
-  const redClick = () => {
-    console.log('RED');
+  const updatePlayerState = (updates: Object) => {
     setPlayerState((prevState) => ({
       ...prevState,
-      currentPlayerIdx: getNextIdx(playerState.currentPlayerIdx),
+      ...updates,
     }));
+  };
+
+  const redClick = () => {
+    updatePlayerState({ currentPlayerIdx: getNextIdx(playerState.currentPlayerIdx) });
   }
   
   const greenClick = () => {
-    console.log('GREEN');
-    setPlayerState((prevState) => ({
-      ...prevState,
-      currentPlayerIdx: getNextIdx(playerState.currentPlayerIdx),
-    }));
+    updatePlayerState({ currentPlayerIdx: getNextIdx(playerState.currentPlayerIdx) });
   }
 
   const fetchData = useCallback(async () => {
-    setPlayerState((prevState) => ({
-      ...prevState,
-      isLoading: true,
-    }));
+    updatePlayerState({ isLoading: true });
 
     try {
       console.log('grabbing player at idx', playerState.currentPlayerIdx);
-      const player = await getPlayer(randomPlayers[playerState.currentPlayerIdx]);
+      let player = null;
+      if (UI_TEST_ONLY) {
+        console.log('ui test only is on');
+        player = {
+          firstName: "Michael",
+          id: 7,
+          lastName: "Irvin", 
+          nickname: "Playmaker", 
+          yearRetired: 2000
+        };
+      }
+      else {
+        player = await getPlayer(randomPlayers[playerState.currentPlayerIdx]);
+      }
 
-      setPlayerState((prevState) => ({
-        ...prevState,
-        data: player,
-      }));
+      updatePlayerState({ data: player });
     } catch (error) {
       console.error('Error fetching player data:', error);
     } finally {
-      setPlayerState((prevState) => ({
-        ...prevState,
-        isLoading: false,
-      }));
+      updatePlayerState({ isLoading: false });
     }
   }, [playerState.currentPlayerIdx]);
 
@@ -87,12 +92,12 @@ const HomePage: React.FC = () => {
   }, [fetchData]);
 
   return (
-      <div className='flex flex-col items-center'>
-        <div className='p-10 border-2 border-black'>
+      <div className='flex flex-col items-center pt-4'>
+        <div className='w-full h-72 border-2 border-black bg-hof-gold'>
           <div>
             { playerState.isLoading ? <span>Loading...</span> 
             : 
-            <div className='flex flex-col'>
+            <div className='flex flex-col '>
               <span className="text-blue-900">{playerState.data?.firstName.toUpperCase()} {playerState.data?.lastName.toUpperCase()}</span>
               <span className="text-red-800">{playerState.data ? formatNickname(playerState.data.nickname) : ''} </span>
               <span className="text-red-800">Year Retired: {playerState.data?.yearRetired} </span>
@@ -101,9 +106,13 @@ const HomePage: React.FC = () => {
           </div>
         </div>
         
-        <div className='pt-5 w-full flex place-content-around'>
-          <Button text="HOF" color='green' onClick={greenClick}></Button>
-          <Button text="NO" color='red' onClick={redClick}></Button>
+        <div className='pt-5 w-full flex items-center justify-center'>
+          <div className='pr-5'>
+            <Button text="HOF" color='green' onClick={greenClick} />
+          </div>
+          <div className='pl-5'>
+            <Button text="NOT" color='red' onClick={redClick} />
+          </div>
         </div>
       </div>
   );

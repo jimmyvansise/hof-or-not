@@ -11,6 +11,10 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        'hof-gold': '#C5A558',
+        'hof-dark-blue': '#16252C',
+        'hof-green': '#2B9648',
+        'hof-red': '#E24244',
       },
     },
   },

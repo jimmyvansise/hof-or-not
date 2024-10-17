@@ -23,9 +23,9 @@ const Button: React.FC<ButtonProps> = ({
     let hoverColor;
 
     if (color === 'green') {
-        borderColor = 'border-green-500';
-        textColor = 'text-green-500';
-        hoverColor = 'hover:bg-green-500';
+        borderColor = 'border-hof-green';
+        textColor = 'text-hof-green';
+        hoverColor = 'hover:bg-hof-green';
     } else if (color === 'blue') {
         borderColor = 'border-blue-500';
         textColor = 'text-blue-500';
