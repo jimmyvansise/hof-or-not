@@ -4,8 +4,6 @@ import Button from '../components/button';
 import { getPlayer } from '../api/players';
 import { PlayerState } from './player-state';
 
-const UI_TEST_ONLY = true;
-
 const createUniqueRandomArray = (n: number) : number[] => {
   const numbers: number[] = [];
   const shuffledNumbers: number[] = [];
@@ -44,7 +42,7 @@ const HomePage: React.FC = () => {
     data: null,
   });
 
-  const updatePlayerState = (updates: Object) => {
+  const updatePlayerState = (updates: object) => {
     setPlayerState((prevState) => ({
       ...prevState,
       ...updates,
@@ -65,7 +63,7 @@ const HomePage: React.FC = () => {
     try {
       console.log('grabbing player at idx', playerState.currentPlayerIdx);
       let player = null;
-      if (UI_TEST_ONLY) {
+      if (process.env.NEXT_PUBLIC_UI_TEST_ONLY) {
         console.log('ui test only is on');
         player = {
           firstName: "Michael",
