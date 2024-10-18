@@ -63,7 +63,7 @@ const HomePage: React.FC = () => {
     try {
       console.log('grabbing player at idx', playerState.currentPlayerIdx);
       let player = null;
-      if (process.env.NEXT_PUBLIC_UI_TEST_ONLY) {
+      if (process.env.NEXT_PUBLIC_UI_TEST_ONLY === 'true') {
         console.log('ui test only is on');
         player = {
           firstName: "Michael",
