@@ -96,9 +96,9 @@ const HomePage: React.FC = () => {
             { playerState.isLoading ? <span>Loading...</span> 
             : 
             <div className='flex flex-col '>
-              <span className="text-blue-900">{playerState.data?.firstName.toUpperCase()} {playerState.data?.lastName.toUpperCase()}</span>
-              <span className="text-red-800">{playerState.data ? formatNickname(playerState.data.nickname) : ''} </span>
-              <span className="text-red-800">Year Retired: {playerState.data?.yearRetired} </span>
+              <span className="text-hof-dark-blue font-alfa text-lg">{playerState.data?.firstName.toUpperCase()} {playerState.data?.lastName.toUpperCase()}</span>
+              <span className="text-red-800 font-montserrat text-lg">{playerState.data ? formatNickname(playerState.data.nickname) : ''} </span>
+              <span className="text-red-800 font-montserrat text-lg">Year Retired: {playerState.data?.yearRetired} </span>
             </div> 
             }
           </div>

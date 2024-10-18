@@ -16,6 +16,10 @@ const config: Config = {
         'hof-green': '#2B9648',
         'hof-red': '#E24244',
       },
+      fontFamily: {
+        alfa: ['Alfa Slab One', 'sans'],
+        montserrat: ['Montserrat', 'sans'],
+      },
     },
   },
   plugins: [],
