@@ -70,7 +70,8 @@ const HomePage: React.FC = () => {
           id: 7,
           lastName: "Irvin", 
           nickname: "Playmaker", 
-          yearRetired: 2000
+          yearRetired: 2000,
+          position: 'WR',
         };
       }
       else {
@@ -91,17 +92,25 @@ const HomePage: React.FC = () => {
 
   return (
       <div className='flex flex-col items-center pt-4'>
-        <div className='w-full h-72 border-2 border-black bg-hof-gold'>
-          <div>
+        <div className='w-full h-72 border-1 border-hof-gold bg-hof-gold'>
             { playerState.isLoading ? <span>Loading...</span> 
             : 
-            <div className='flex flex-col '>
-              <span className="text-hof-dark-blue font-alfa text-lg">{playerState.data?.firstName.toUpperCase()} {playerState.data?.lastName.toUpperCase()}</span>
-              <span className="text-red-800 font-montserrat text-lg">{playerState.data ? formatNickname(playerState.data.nickname) : ''} </span>
-              <span className="text-red-800 font-montserrat text-lg">Year Retired: {playerState.data?.yearRetired} </span>
+            <div className='flex flex-col h-full'>
+              <div className='flex justify-between px-2 pt-2'>
+                <div className="text-hof-dark-blue font-alfa text-lg">{playerState.data?.firstName.toUpperCase()} {playerState.data?.lastName.toUpperCase()}</div>
+                <div className="bg-hof-dark-blue text-hof-gold font-alfa text-lg px-1">{playerState.data?.position}</div>
+              </div>
+              <div className="bg-hof-dark-blue mx-2 mb-2 h-full">
+                <div className="relative w-full h-1/2">
+                  <img className="absolute top-0 left-0 w-full h-full object-contain" src="favicon.ico" alt="Image" />
+                </div>
+                <div className='h-1/2 border-t-4 border-hof-gold text-white font-montserrat text-base flex flex-col p-2'>
+                  <span>Nickname: {playerState.data ? formatNickname(playerState.data.nickname) : ''} </span>
+                  <span>Year Retired: {playerState.data?.yearRetired} </span>
+                </div>
+              </div>
             </div> 
             }
-          </div>
         </div>
         
         <div className='pt-5 w-full flex items-center justify-center'>

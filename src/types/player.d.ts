@@ -3,5 +3,6 @@ type Player = {
     readonly firstName: string;
     readonly lastName: string;
     readonly nickname: string;
+    readonly position: string;
     readonly yearRetired: number;
 };
