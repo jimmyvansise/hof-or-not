@@ -5,6 +5,7 @@ import { getPlayer } from '../api/players';
 import { PlayerState } from './player-state';
 
 const TOTAL_PLAYERS = 11;
+const LOAD_INDICATOR = false;
 
 const createUniqueRandomArray = (n: number) : number[] => {
   const numbers: number[] = [];
@@ -43,7 +44,7 @@ const renderPlayerImage = (data?: Player | null): JSX.Element | string => {
   return (
     <img
       className="absolute top-0 left-0 w-full h-full object-contain"
-      src={`data:image/png;base64,${data.picture}`}
+      src={`data:image/jpeg;base64,${data.picture}`}
       alt="Image"
     />
   );
@@ -111,8 +112,8 @@ const HomePage: React.FC = () => {
   return (
       <div className='flex flex-col items-center pt-4'>
         <div className='w-full h-72 border-1 border-hof-gold bg-hof-gold'>
-            { playerState.isLoading ? 
-              <span>Loading...</span> : 
+            { LOAD_INDICATOR && playerState.isLoading ? 
+              <span>Loading...</span> :
               <div className='flex flex-col h-full'>
                 <div className='flex justify-between px-2 pt-2'>
                   <div className="text-hof-dark-blue font-alfa text-lg">{playerState.data?.firstName.toUpperCase()} {playerState.data?.lastName.toUpperCase()}</div>
