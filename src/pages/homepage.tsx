@@ -4,11 +4,13 @@ import Button from '../components/button';
 import { getPlayer } from '../api/players';
 import { PlayerState } from './player-state';
 
+const TOTAL_PLAYERS = 11;
+
 const createUniqueRandomArray = (n: number) : number[] => {
   const numbers: number[] = [];
   const shuffledNumbers: number[] = [];
 
-  for (let i = 1; i <= 10; i++) {
+  for (let i = 1; i <= TOTAL_PLAYERS; i++) {
     numbers.push(i);
   }
 
@@ -21,8 +23,6 @@ const createUniqueRandomArray = (n: number) : number[] => {
   return shuffledNumbers.slice(0, n);
 }
 
-const TOTAL_PLAYERS = 10;
-
 const getNextIdx = (curIdx: number) : number => curIdx >= TOTAL_PLAYERS - 1 ? 0 : curIdx + 1;
 
 const randomPlayers = createUniqueRandomArray(TOTAL_PLAYERS);
@@ -33,6 +33,20 @@ const formatNickname = (nickname: string) => {
   }
 
   return '';
+}
+
+const renderPlayerImage = (data?: Player | null): JSX.Element | string => {
+  if (!data?.picture) {
+    return '';
+  }
+
+  return (
+    <img
+      className="absolute top-0 left-0 w-full h-full object-contain"
+      src={`data:image/png;base64,${data.picture}`}
+      alt="Image"
+    />
+  );
 }
 
 const HomePage: React.FC = () => {
@@ -69,9 +83,13 @@ const HomePage: React.FC = () => {
           firstName: "Michael",
           id: 7,
           lastName: "Irvin", 
-          nickname: "Playmaker", 
-          yearRetired: 2000,
+          nickname: "Playmaker",
           position: 'WR',
+          superBowlWins: 3,
+          proBowls: 0,
+          mvps: 0,
+          yearRetired: 2000,
+          picture: null,
         };
       }
       else {
@@ -93,23 +111,26 @@ const HomePage: React.FC = () => {
   return (
       <div className='flex flex-col items-center pt-4'>
         <div className='w-full h-72 border-1 border-hof-gold bg-hof-gold'>
-            { playerState.isLoading ? <span>Loading...</span> 
-            : 
-            <div className='flex flex-col h-full'>
-              <div className='flex justify-between px-2 pt-2'>
-                <div className="text-hof-dark-blue font-alfa text-lg">{playerState.data?.firstName.toUpperCase()} {playerState.data?.lastName.toUpperCase()}</div>
-                <div className="bg-hof-dark-blue text-hof-gold font-alfa text-lg px-1">{playerState.data?.position}</div>
-              </div>
-              <div className="bg-hof-dark-blue mx-2 mb-2 h-full">
-                <div className="relative w-full h-1/2">
-                  <img className="absolute top-0 left-0 w-full h-full object-contain" src="favicon.ico" alt="Image" />
+            { playerState.isLoading ? 
+              <span>Loading...</span> : 
+              <div className='flex flex-col h-full'>
+                <div className='flex justify-between px-2 pt-2'>
+                  <div className="text-hof-dark-blue font-alfa text-lg">{playerState.data?.firstName.toUpperCase()} {playerState.data?.lastName.toUpperCase()}</div>
+                  <div className="bg-hof-dark-blue text-hof-gold font-alfa text-lg px-1">{playerState.data?.position}</div>
                 </div>
-                <div className='h-1/2 border-t-4 border-hof-gold text-white font-montserrat text-base flex flex-col p-2'>
-                  <span>Nickname: {playerState.data ? formatNickname(playerState.data.nickname) : ''} </span>
-                  <span>Year Retired: {playerState.data?.yearRetired} </span>
+                <div className="bg-hof-dark-blue mx-2 mb-2 h-full">
+                  <div className="relative w-full h-1/2">
+                    { renderPlayerImage(playerState.data) }
+                  </div>
+                  <div className='h-1/2 border-t-4 border-hof-gold text-white font-montserrat text-base flex flex-col p-2'>
+                    <span>Nickname: {playerState.data ? formatNickname(playerState.data.nickname) : ''} </span>
+                    <span>Super Bowl Wins: {playerState.data?.superBowlWins}</span>
+                    <span>Pro Bowls: {playerState.data?.proBowls}</span>
+                    <span>MVPs: {playerState.data?.mvps}</span>
+                    <span>Year Retired: {playerState.data?.yearRetired}</span>
+                  </div>
                 </div>
-              </div>
-            </div> 
+              </div> 
             }
         </div>
         
