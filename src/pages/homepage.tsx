@@ -4,7 +4,8 @@ import Button from '../components/button';
 import { getPlayer } from '../api/players';
 import { PlayerState } from './player-state';
 
-const TOTAL_PLAYERS = 11;
+// TODO: make a call that gets this number instead
+const TOTAL_PLAYERS = 15;
 const LOAD_INDICATOR = false;
 
 const createUniqueRandomArray = (n: number) : number[] => {
