@@ -2,6 +2,7 @@
 import React, {useEffect, useCallback, useState} from 'react';
 import Button from '../components/button';
 import { getPlayer } from '../api/players';
+import { postVote } from '../api/votes';
 import { PlayerState } from './player-state';
 
 // TODO: make a call that gets this number instead
@@ -65,11 +66,21 @@ const HomePage: React.FC = () => {
     }));
   };
 
-  const redClick = () => {
-    updatePlayerState({ currentPlayerIdx: getNextIdx(playerState.currentPlayerIdx) });
+  const redClick = async () => {
+    // block ui
+    // vote
+    try {
+      await postVote(randomPlayers[playerState.currentPlayerIdx], false);
+    } catch (error) {
+      console.error('Error voting:', error);
+    } finally {
+      // TODO: move to next page with results
+      updatePlayerState({ currentPlayerIdx: getNextIdx(playerState.currentPlayerIdx) });
+    }
   }
   
   const greenClick = () => {
+    // vote
     updatePlayerState({ currentPlayerIdx: getNextIdx(playerState.currentPlayerIdx) });
   }
 
@@ -82,8 +93,8 @@ const HomePage: React.FC = () => {
       if (process.env.NEXT_PUBLIC_UI_TEST_ONLY === 'true') {
         console.log('ui test only is on');
         player = {
+          playerId: 7,
           firstName: "Michael",
-          id: 7,
           lastName: "Irvin", 
           nickname: "Playmaker",
           position: 'WR',

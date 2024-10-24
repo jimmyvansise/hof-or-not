@@ -1,5 +1,5 @@
 type Player = {
-    readonly id: number;
+    readonly playerId: number;
     readonly firstName: string;
     readonly lastName: string;
     readonly nickname: string;
