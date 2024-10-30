@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "HOF or Not",
-  description: "Who should make the NFL HOF???",
+  description: "You Decide Who Earns a Spot in the Hall Of Fame",
 };
 
 export default function RootLayout({
@@ -11,6 +11,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Fonts go here, and also in tailwind.config.ts
   return (
     <>
     <head>
