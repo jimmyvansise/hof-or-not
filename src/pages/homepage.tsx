@@ -7,6 +7,7 @@ import { postVote } from '../api/votes';
 import { PlayerState } from './player-state';
 
 // for debugging, eventually delete
+
 /*
 const wait = (ms: number): Promise<void> => {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -47,7 +48,7 @@ const formatNickname = (nickname: string) => {
 }
 
 const formatPlayerName = (firstName: string | undefined, lastName: string | undefined) => {
-  if (!firstName || !lastName) return '-';
+  if (!firstName || !lastName) return '';
 
   return `${firstName.toUpperCase()} ${lastName.toUpperCase()}`;
 }
@@ -78,7 +79,7 @@ const renderPlayer = (playerState: PlayerState,
           :
           <div className='flex flex-col h-full'>
             <div className='flex justify-between px-2 pt-2'>
-              <div className="text-hof-dark-blue font-alfa text-lg">{formatPlayerName(playerState.data?.firstName, playerState.data?.lastName)}</div>
+              <div className="text-hof-dark-blue font-alfa text-lg">{formatPlayerName(playerState.data?.firstName, playerState.data?.lastName)}&nbsp;</div>
               <div className="bg-hof-dark-blue text-hof-gold font-alfa text-lg px-1">{playerState.data?.position}</div>
             </div>
             <div className="bg-hof-dark-blue mx-2 mb-2 h-full">
