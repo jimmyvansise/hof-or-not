@@ -6,6 +6,13 @@ import { getPlayer } from '../api/players';
 import { postVote } from '../api/votes';
 import { PlayerState } from './player-state';
 
+// for debugging, eventually delete
+/*
+const wait = (ms: number): Promise<void> => {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+*/
+
 // TODO: make a call that gets this number instead
 const TOTAL_PLAYERS = 15;
 const LOAD_INDICATOR = false;
@@ -65,9 +72,10 @@ const renderPlayer = (playerState: PlayerState,
 ): JSX.Element | string => {
   return (
     <>
-      <div className='w-full h-72 border-1 border-hof-gold bg-hof-gold'>
+      <div className='w-full h-96 border-1 border-hof-gold bg-hof-gold'>
         { LOAD_INDICATOR && playerState.isLoading ? 
-          <span>Loading...</span> :
+          <span>Loading...</span> 
+          :
           <div className='flex flex-col h-full'>
             <div className='flex justify-between px-2 pt-2'>
               <div className="text-hof-dark-blue font-alfa text-lg">{formatPlayerName(playerState.data?.firstName, playerState.data?.lastName)}</div>
@@ -77,7 +85,7 @@ const renderPlayer = (playerState: PlayerState,
               <div className="relative w-full h-1/2">
                 { renderPlayerImage(playerState.data) }
               </div>
-              <div className='h-1/2 border-t-4 border-hof-gold text-white font-montserrat text-sm flex flex-col p-2'>
+              <div className='h-1/2 border-t-4 border-hof-gold text-white font-montserrat text-base flex flex-col p-2'>
                 <span>Nickname: {playerState.data ? formatNickname(playerState.data.nickname) : ''} </span>
                 <span>Super Bowl Wins: {playerState.data?.superBowlWins}</span>
                 <span>Pro Bowls: {playerState.data?.proBowls}</span>
@@ -89,7 +97,7 @@ const renderPlayer = (playerState: PlayerState,
         }
       </div>
         
-      <div className='pt-5 w-full flex items-center justify-center'>
+      <div className='pt-4 w-full flex items-center justify-center'>
         <div className='pr-5'>
           <Button text="HOF" color='green' onClick={greenClick} disabled={playerState.isLoading}/>
         </div>
@@ -106,17 +114,11 @@ const renderVoteResults = (playerState: PlayerState,
 ): JSX.Element | string => {
   return (
     <VoteResultsPage playerName={formatPlayerName(playerState.data?.firstName, playerState.data?.lastName)} 
-      hofChoice={playerState.voteData ? playerState.voteData.hofChoice : false} hofYesPercent={40}
+      hofChoice={playerState.voteData ? playerState.voteData.hofChoice : false} 
+      hofYesPercent={playerState.voteData ? playerState.voteData.hofYesPercent : 0}
       onClickNext={onClickNext} />
   );
 }
-
-// for debugging
-/*
-const wait = (ms: number): Promise<void> => {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-*/
 
 const HomePage: React.FC = () => {
   const [playerState, setPlayerState] = useState<PlayerState>({
@@ -168,25 +170,7 @@ const HomePage: React.FC = () => {
 
     try {
       console.log('grabbing player at idx', playerState.currentPlayerIdx);
-      let player = null;
-      if (process.env.NEXT_PUBLIC_UI_TEST_ONLY === 'true') {
-        console.log('ui test only is on');
-        player = {
-          playerId: 7,
-          firstName: "Michael",
-          lastName: "Irvin", 
-          nickname: "Playmaker",
-          position: 'WR',
-          superBowlWins: 3,
-          proBowls: 0,
-          mvps: 0,
-          yearRetired: 2000,
-          picture: null,
-        };
-      }
-      else {
-        player = await getPlayer(randomPlayers[playerState.currentPlayerIdx]);
-      }
+      const player = await getPlayer(randomPlayers[playerState.currentPlayerIdx]);
 
       updatePlayerState({ data: player });
     } catch (error) {
@@ -202,11 +186,11 @@ const HomePage: React.FC = () => {
 
   return (
       <div className='flex flex-col items-center pt-4'>
-        { !playerState.showVoteResults ?
-          renderPlayer(playerState, redClick, greenClick)
-          :
+        { 
+          !playerState.showVoteResults ?
+          renderPlayer(playerState, redClick, greenClick) :
           renderVoteResults(playerState, goToNextPlayer)
-      }
+        }
       </div>
   );
 }

@@ -3,5 +3,5 @@ export interface PlayerState {
     currentPlayerIdx: number;
     data: Player | null;
     showVoteResults: false,
-    voteData: Vote | null,
+    voteData: VoteAndResults | null,
   }

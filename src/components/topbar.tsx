@@ -11,7 +11,7 @@ const TopBar: React.FC = () => {
             <span className='text-hof-gold'> OR</span>
             <span className='text-hof-red'> NOT</span>
           </h1>
-          <div className='mr-2 text-hof-gold text-sm w-full text-right'>THE PEOPLE'S VOTE FOR THE HALL OF FAME</div>
+          <div className='mr-2 text-hof-gold text-sm w-full text-right'>THE PEOPLE&apos;S VOTE FOR THE HALL OF FAME</div>
         </div>
         {/* Add navigation links or other elements here The People's Vote for the Hall of Fame */}
       </div>

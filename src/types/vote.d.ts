@@ -6,3 +6,9 @@ type Vote = {
     readonly createdAt: dateTime;
     readonly updatedAt: dateTime;
 };
+
+type Results = {
+    readonly hofYesPercent: number;
+}
+
+type VoteAndResults = Vote & Results;
