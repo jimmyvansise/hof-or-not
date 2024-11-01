@@ -73,7 +73,7 @@ const renderPlayer = (playerState: PlayerState,
 ): JSX.Element | string => {
   return (
     <>
-      <div className='w-full h-96 border-1 border-hof-gold bg-hof-gold'>
+      <div className='w-full h-96 bg-hof-gold'>
         { LOAD_INDICATOR && playerState.isLoading ? 
           <span>Loading...</span> 
           :
@@ -114,8 +114,10 @@ const renderVoteResults = (playerState: PlayerState,
   onClickNext: React.MouseEventHandler<HTMLButtonElement>, 
 ): JSX.Element | string => {
   return (
-    <VoteResultsPage playerName={formatPlayerName(playerState.data?.firstName, playerState.data?.lastName)} 
-      hofChoice={playerState.voteData ? playerState.voteData.hofChoice : false} 
+    <VoteResultsPage 
+      playerName={formatPlayerName(playerState.data?.firstName, playerState.data?.lastName)}
+      picture={playerState.data ? playerState.data.picture : ''}
+      hofChoice={playerState.voteData ? playerState.voteData.hofChoice : false}
       hofYesPercent={playerState.voteData ? playerState.voteData.hofYesPercent : 0}
       onClickNext={onClickNext} />
   );

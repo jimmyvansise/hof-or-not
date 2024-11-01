@@ -1,17 +1,35 @@
 'use client'
 import React, { MouseEventHandler } from 'react';
 import clsx from 'clsx';
-import WideButton from '@/components/wide-button';
+import WideButton from '../components/wide-button';
 
 type VoteResultsPageProps = {
     playerName: string;
+    picture: string;
     hofYesPercent: number;
     hofChoice?: boolean;
     onClickNext?: MouseEventHandler<HTMLButtonElement>;
 };
 
+const renderPlayerImage = (picture: string, hofBorderColor: string): JSX.Element | string => {
+    if (!picture.length) {
+      return '';
+    }
+  
+    return (
+        <div className='absolute top-0 left-0 h-full w-full flex justify-center'>
+            <img
+                className={clsx(`${hofBorderColor} border-4 h-full object-contain`)}
+                src={`data:image/jpeg;base64,${picture}`}
+                alt="Image"
+            />
+        </div>
+    );
+  }
+
 const VoteResultsPage: React.FC<VoteResultsPageProps> = ({
     playerName,
+    picture,
     hofYesPercent,
     hofChoice,
     onClickNext,
@@ -21,18 +39,27 @@ const VoteResultsPage: React.FC<VoteResultsPageProps> = ({
 
     return (
         <>
-            <div className='w-full h-96 border-1 border-hof-gold bg-hof-blue mb-4'>
+            <div className='w-full h-96 bg-hof-blue mb-4'>
                 <div className='flex flex-col items-center font-alfa h-full'>
                     <div className='h-1/6'>
                         <div className={clsx(`${hofTextColor} text-lg`)}>{playerName}</div>
                     </div>
-                    <div className='flex justify-between h-3/6'>
-                        <div className="text-white text-lg">HOF {hofYesPercent}%</div>
-                        <div className="text-white text-lg">NOT {(100 - hofYesPercent)}%</div>
+                    <div className='relative w-full h-2/6'>
+                        { renderPlayerImage(picture, hofBorderColor) }
                     </div>
-                    <div className='h-2/6'>
-                        <div className={clsx(`${hofTextColor} text-base`)}>You Voted</div>
-                        <div className={clsx(`${hofTextColor} ${hofBorderColor} text-center text-xl  border-t-2`)}>{hofChoice ? 'HOF' : 'NOT'}</div>
+                    <div className='flex h-1/6 items-center text-center text-white text-sm w-60'>
+                        <div className="flex flex-col justify-center h-full w-1/2 bg-hof-green">
+                            <div className="w-full">HOF</div>
+                            <div className="w-full">{hofYesPercent}%</div>
+                        </div>
+                        <div className="flex flex-col justify-center h-full w-1/2 bg-hof-red ">
+                            <div className="w-full">NOT</div>
+                            <div className="w-full">{(100 - hofYesPercent)}%</div>
+                        </div>
+                    </div>
+                    <div className='h-2/6 pt-4'>
+                        <div className={clsx(`${hofTextColor} text-xl`)}>You Voted</div>
+                        <div className={clsx(`${hofTextColor} ${hofBorderColor} text-center text-3xl border-t-2`)}>{hofChoice ? 'HOF' : 'NOT'}</div>
                     </div>
                 </div>
             </div>
