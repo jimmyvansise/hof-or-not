@@ -7,12 +7,9 @@ import { postVote } from '../api/votes';
 import { PlayerState } from './player-state';
 
 // for debugging, eventually delete
-
-/*
 const wait = (ms: number): Promise<void> => {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
-*/
 
 // TODO: make a call that gets this number instead
 const TOTAL_PLAYERS = 15;
@@ -140,7 +137,7 @@ const HomePage: React.FC = () => {
   };
 
   const goToNextPlayer = () => {
-    updatePlayerState({ isLoading: true, showVoteResults: false, currentPlayerIdx: getNextIdx(playerState.currentPlayerIdx) });
+    updatePlayerState({ isLoading: true, data: null, showVoteResults: false, currentPlayerIdx: getNextIdx(playerState.currentPlayerIdx) });
   }
 
   const redClick = async () => {
