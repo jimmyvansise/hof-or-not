@@ -3,7 +3,7 @@ import React, { MouseEventHandler } from 'react';
 import clsx from 'clsx';
 import WideButton from '../components/wide-button';
 
-type VoteResultsPageProps = {
+type PlayerVoteResultsProps = {
     playerName: string;
     picture: string;
     hofYesPercent: number;
@@ -27,7 +27,7 @@ const renderPlayerImage = (picture: string, hofBorderColor: string): JSX.Element
     );
   }
 
-const VoteResultsPage: React.FC<VoteResultsPageProps> = ({
+const PlayerVoteResults: React.FC<PlayerVoteResultsProps> = ({
     playerName,
     picture,
     hofYesPercent,
@@ -68,4 +68,4 @@ const VoteResultsPage: React.FC<VoteResultsPageProps> = ({
     );
 }
 
-export default VoteResultsPage;
+export default PlayerVoteResults;

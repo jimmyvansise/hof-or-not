@@ -1,7 +1,7 @@
 'use client'
 import React, {useEffect, useCallback, useState} from 'react';
 import Button from '../components/button';
-import VoteResultsPage from './vote-results-page';
+import PlayerVoteResults from '../components/player-vote-results';
 import { getPlayer } from '../api/players';
 import { postVote } from '../api/votes';
 
@@ -120,7 +120,7 @@ const renderVoteResults = (playerState: PlayerState,
   onClickNext: React.MouseEventHandler<HTMLButtonElement>, 
 ): JSX.Element | string => {
   return (
-    <VoteResultsPage 
+    <PlayerVoteResults 
       playerName={formatPlayerName(playerState.data?.firstName, playerState.data?.lastName)}
       picture={playerState.data ? playerState.data.picture : ''}
       hofChoice={playerState.voteData ? playerState.voteData.hofChoice : false}
