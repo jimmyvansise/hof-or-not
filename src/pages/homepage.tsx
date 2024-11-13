@@ -4,7 +4,6 @@ import Button from '../components/button';
 import VoteResultsPage from './vote-results-page';
 import { getPlayer } from '../api/players';
 import { postVote } from '../api/votes';
-import { PlayerState } from './player-state';
 
 // for debugging, eventually delete
 /*
@@ -16,6 +15,14 @@ const wait = (ms: number): Promise<void> => {
 // TODO: make a call that gets this number instead
 const TOTAL_PLAYERS = 15;
 const LOAD_INDICATOR = false;
+
+interface PlayerState {
+  isLoading: boolean;
+  currentPlayerIdx: number;
+  data: Player | null;
+  showVoteResults: false,
+  voteData: VoteAndResults | null,
+}
 
 const createUniqueRandomArray = (n: number) : number[] => {
   const numbers: number[] = [];
