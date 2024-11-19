@@ -73,9 +73,10 @@ const renderPlayerImage = (data?: Player | null): JSX.Element | string => {
   );
 }
 
-const renderPlayer = (playerState: PlayerState, 
-  redClick: React.MouseEventHandler<HTMLButtonElement>, 
-  greenClick: React.MouseEventHandler<HTMLButtonElement>
+const renderPlayer = (
+  playerState: PlayerState, 
+  clickVoteTrue: React.MouseEventHandler<HTMLButtonElement>,
+  clickVoteFalse: React.MouseEventHandler<HTMLButtonElement>,
 ): JSX.Element | string => {
   return (
     <>
@@ -106,10 +107,10 @@ const renderPlayer = (playerState: PlayerState,
         
       <div className='pt-4 w-full flex items-center justify-center'>
         <div className='pr-5'>
-          <Button text="HOF" color='green' onClick={greenClick} disabled={playerState.isLoading}/>
+          <Button text="HOF" color='green' onClick={clickVoteTrue} disabled={playerState.isLoading}/>
         </div>
         <div className='pl-5'>
-          <Button text="NOT" color='red' onClick={redClick} disabled={playerState.isLoading}/>
+          <Button text="NOT" color='red' onClick={clickVoteFalse} disabled={playerState.isLoading}/>
         </div>
       </div>
       </>
@@ -149,25 +150,12 @@ const HomePage: React.FC = () => {
     updatePlayerState({ isLoading: true, data: null, showVoteResults: false, currentPlayerIdx: getNextIdx(playerState.currentPlayerIdx) });
   }
 
-  const redClick = async () => {
+  const clickVote = async (hofChoice: boolean) => {
     updatePlayerState({ isLoading: true });
     try {
-      const voteData = await postVote(randomPlayers[playerState.currentPlayerIdx], false);
+      const voteData = await postVote(randomPlayers[playerState.currentPlayerIdx], hofChoice);
       updatePlayerState({ isLoading: false, showVoteResults: true, voteData})
-      console.log('vote data red:', voteData);
-    } catch (error) {
-      console.error('Error voting:', error);
-      updatePlayerState({ isLoading: false });
-    }
-  }
-  
-  const greenClick = async () => {
-    updatePlayerState({ isLoading: true });
-
-    try {
-      const voteData = await postVote(randomPlayers[playerState.currentPlayerIdx], true);
-      updatePlayerState({ isLoading: false, showVoteResults: true, voteData})
-      console.log('vote data green:', voteData);
+      console.log('vote data:', voteData);
     } catch (error) {
       console.error('Error voting:', error);
       updatePlayerState({ isLoading: false });
@@ -197,7 +185,7 @@ const HomePage: React.FC = () => {
       <div className='flex flex-col items-center pt-4'>
         { 
           !playerState.showVoteResults ?
-          renderPlayer(playerState, redClick, greenClick) :
+          renderPlayer(playerState, () => clickVote(true), () => clickVote(false)) :
           renderVoteResults(playerState, goToNextPlayer)
         }
       </div>
