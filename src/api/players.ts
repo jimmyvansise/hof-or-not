@@ -10,7 +10,7 @@ export const getPlayer = async (playerId: number): Promise<Player> => {
     });
     
     const player = await response.json();
-    console.log('got data for getPlayer:', player);
+    // console.log('got data for getPlayer:', player);
 
     return player;
 };

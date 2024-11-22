@@ -155,7 +155,7 @@ const HomePage: React.FC = () => {
     try {
       const voteData = await postVote(randomPlayers[playerState.currentPlayerIdx], hofChoice);
       updatePlayerState({ isLoading: false, showVoteResults: true, voteData})
-      console.log('vote data:', voteData);
+      // console.log('vote data:', voteData);
     } catch (error) {
       console.error('Error voting:', error);
       updatePlayerState({ isLoading: false });
@@ -166,7 +166,7 @@ const HomePage: React.FC = () => {
     updatePlayerState({ isLoading: true });
 
     try {
-      console.log('grabbing player at idx', playerState.currentPlayerIdx);
+      // console.log('grabbing player at idx', playerState.currentPlayerIdx);
       const player = await getPlayer(randomPlayers[playerState.currentPlayerIdx]);
 
       updatePlayerState({ data: player });

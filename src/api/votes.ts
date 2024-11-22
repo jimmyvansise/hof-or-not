@@ -12,7 +12,7 @@ export const postVote = async (playerId: number, hofChoice: boolean): Promise<Vo
     });
     
     const vote = await response.json();
-    console.log('got data for postVote:', vote);
+    // console.log('got data for postVote:', vote);
 
     return vote;
 };
