@@ -2,6 +2,7 @@
 import React, { MouseEventHandler } from 'react';
 import clsx from 'clsx';
 import WideButton from '../components/wide-button';
+import Image from 'next/image';
 
 type PlayerVoteResultsProps = {
     playerName: string;
@@ -18,7 +19,7 @@ const renderPlayerImage = (picture: string, hofBorderColor: string): JSX.Element
   
     return (
         <div className='absolute top-0 left-0 h-full w-full flex justify-center'>
-            <img
+            <Image
                 className={clsx(`${hofBorderColor} border-4 h-full object-contain`)}
                 src={`data:image/jpeg;base64,${picture}`}
                 alt="Image"
