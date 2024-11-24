@@ -1,6 +1,5 @@
 'use client'
 import React, {useEffect, useCallback, useState} from 'react';
-import Image from 'next/image';
 import Button from '../components/button';
 import PlayerVoteResults from '../components/player-vote-results';
 import { getPlayer } from '../api/players';
@@ -66,7 +65,7 @@ const renderPlayerImage = (data?: Player | null): JSX.Element | string => {
   }
 
   return (
-    <Image
+    <img
       className="absolute top-0 left-0 w-full h-full object-contain"
       src={`data:image/jpeg;base64,${data.picture}`}
       alt="Image"
