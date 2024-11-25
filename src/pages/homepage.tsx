@@ -1,6 +1,7 @@
 'use client'
 import React, {useEffect, useCallback, useState} from 'react';
 import Button from '../components/button';
+import YesNoButton from '@/components/yes-no-button';
 import PlayerVoteResults from '../components/player-vote-results';
 import { getPlayer } from '../api/players';
 import { postVote } from '../api/votes';
@@ -107,10 +108,10 @@ const renderPlayer = (
         
       <div className='pt-4 w-full flex items-center justify-center'>
         <div className='pr-5'>
-          <Button text="HOF" color='green' onClick={clickVoteTrue} disabled={playerState.isLoading}/>
+          <YesNoButton typeYes onClick={clickVoteTrue} disabled={playerState.isLoading}/>
         </div>
         <div className='pl-5'>
-          <Button text="NOT" color='red' onClick={clickVoteFalse} disabled={playerState.isLoading}/>
+          <YesNoButton typeYes={false} onClick={clickVoteFalse} disabled={playerState.isLoading}/>
         </div>
       </div>
       </>

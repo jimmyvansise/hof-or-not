@@ -7,7 +7,6 @@ type ColorOptions = 'green' | 'blue' | 'red';
 type ButtonProps = {
     text: string;
     color: ColorOptions;
-    // not sure if needed type?: 'button' | 'submit';
     disabled?: boolean;
     onClick?: MouseEventHandler<HTMLButtonElement>;
 };
