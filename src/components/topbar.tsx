@@ -1,12 +1,13 @@
 import React from 'react';
 import Image from 'next/image';
+import crown from '../assets/crown-md.png';
 
 const TopBar: React.FC = () => {
   return (
     <header className="bg-hof-dark-blue border-b-4 border-hof-gold py-2 px-2">
       <div className="flex items-center justify-between">
         <div className="flex items-center w-full font-alfa">
-          <Image src={require('../assets/crown-md.png')} alt="Logo" className="h-8 w-8" />
+          <Image src={crown} alt="Logo" className="h-8 w-8" />
           <h1 className="ml-2 text-2xl min-w-44">
             <span className='text-hof-green'>HOF</span>
             <span className='text-hof-gold'> OR</span>
