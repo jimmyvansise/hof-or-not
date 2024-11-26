@@ -1,6 +1,10 @@
 'use client'
 import React from 'react';
 import clsx from 'clsx';
+import Image from 'next/image';
+import trophy from '../assets/trophy.png';
+import star from '../assets/star.png';
+import award from '../assets/award.png';
 
 type AccoladeOptions = 'superbowl' | 'probowl' | 'mvp';
 
@@ -13,27 +17,25 @@ const AccoladeIcon: React.FC<AccoladeIconProps> = ({
     accolade,
     amount,
 }) => {
-    let bgUrl;
+    let imgSrc;
     let amountDescription;
 
     if (accolade === 'superbowl') {
-        bgUrl = "bg-[url('../assets/trophy.png')]";
+        imgSrc = trophy;
         amountDescription = "Champ";
     } else if (accolade === 'probowl') {
-        bgUrl = "bg-[url('../assets/star.png')]";
+        imgSrc = star;
         amountDescription = "Pro Bowl";
     }
     else { // 'mvp'
-        bgUrl = "bg-[url('../assets/award.png')]";
+        imgSrc = award;
         amountDescription = "MVP";
     } 
 
     return (
         <div>
-            <img
-                className={clsx(`${bgUrl} bg-cover mx-auto p-4`)}
-                alt='Accolade Image'
-            ></img>
+            <Image src={imgSrc} alt="Accolade Image" className="h-8 w-8 mx-auto" />
+            
             <div className={clsx(`bg-hof-gold text-hof-dark-blue text-center font-alfa text-xs p-1 mt-1 rounded-md`)}>
                 <div>{amount}x</div>
                 <div>{amountDescription}</div>
