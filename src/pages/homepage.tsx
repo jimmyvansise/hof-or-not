@@ -1,10 +1,10 @@
 'use client'
 import React, {useEffect, useCallback, useState} from 'react';
-import Button from '../components/button';
 import YesNoButton from '@/components/yes-no-button';
 import PlayerVoteResults from '../components/player-vote-results';
 import { getPlayer } from '../api/players';
 import { postVote } from '../api/votes';
+import AccoladeIcon from '@/components/accolade-icon';
 
 // for debugging, eventually delete
 /*
@@ -54,6 +54,14 @@ const formatNickname = (nickname: string) => {
   return '';
 }
 
+const formatRetired = (yearRetired: number) => {
+  if (yearRetired) {
+    return `Retired in ${yearRetired}`;
+  }
+
+  return 'Current Player';
+}
+
 const formatPlayerName = (firstName: string | undefined, lastName: string | undefined) => {
   if (!firstName || !lastName) return '';
 
@@ -95,11 +103,13 @@ const renderPlayer = (
                 { renderPlayerImage(playerState.data) }
               </div>
               <div className='h-1/2 border-t-4 border-hof-gold text-white font-montserrat text-base flex flex-col p-2'>
-                <span>Nickname: {playerState.data ? formatNickname(playerState.data.nickname) : ''} </span>
-                <span>Super Bowl Wins: {playerState.data?.superBowlWins}</span>
-                <span>Pro Bowls: {playerState.data?.proBowls}</span>
-                <span>MVPs: {playerState.data?.mvps}</span>
-                <span>Year Retired: {playerState.data?.yearRetired}</span>
+                <div className='flex justify-around'>
+                  <AccoladeIcon accolade='superbowl' amount={playerState.data ? playerState.data.superBowlWins : 0} />
+                  <AccoladeIcon accolade='probowl' amount={playerState.data ? playerState.data.proBowls : 0} />
+                  <AccoladeIcon accolade='mvp' amount={playerState.data ? playerState.data.mvps : 0} />
+                </div>
+                <div className='pt-4'>{playerState.data ? formatNickname(playerState.data.nickname) : ''}</div>
+                <div className='italic'>{playerState.data ? formatRetired(playerState.data.yearRetired) : ''}</div>
               </div>
             </div>
           </div>
