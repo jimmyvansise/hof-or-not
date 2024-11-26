@@ -1,5 +1,5 @@
 'use client'
-import React, { MouseEventHandler } from 'react';
+import React from 'react';
 import clsx from 'clsx';
 
 type AccoladeOptions = 'superbowl' | 'probowl' | 'mvp';
