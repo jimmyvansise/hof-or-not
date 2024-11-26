@@ -21,7 +21,7 @@ const renderPlayerImage = (picture: string, hofBorderColor: string): JSX.Element
             <img
                 className={clsx(`${hofBorderColor} border-4 h-full object-contain`)}
                 src={`data:image/jpeg;base64,${picture}`}
-                alt="Image"
+                alt="Player Image"
             />
         </div>
     );

@@ -32,6 +32,7 @@ const AccoladeIcon: React.FC<AccoladeIconProps> = ({
         <div>
             <img
                 className={clsx(`${bgUrl} bg-cover mx-auto p-4`)}
+                alt='Accolade Image'
             ></img>
             <div className={clsx(`bg-hof-gold text-hof-dark-blue text-center font-alfa text-xs p-1 mt-1 rounded-md`)}>
                 <div>{amount}x</div>

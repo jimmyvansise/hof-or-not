@@ -77,7 +77,7 @@ const renderPlayerImage = (data?: Player | null): JSX.Element | string => {
     <img
       className="absolute top-0 left-0 w-full h-full object-contain"
       src={`data:image/jpeg;base64,${data.picture}`}
-      alt="Image"
+      alt="Player Image"
     />
   );
 }
