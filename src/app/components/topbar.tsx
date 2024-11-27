@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import crown from '../assets/crown-md.png';
+import crown from '../../assets/crown-md.png';
 
 const TopBar: React.FC = () => {
   return (

@@ -2,9 +2,9 @@
 import React from 'react';
 import clsx from 'clsx';
 import Image from 'next/image';
-import trophy from '../assets/trophy.png';
-import star from '../assets/star.png';
-import award from '../assets/award.png';
+import trophy from '../../assets/trophy.png';
+import star from '../../assets/star.png';
+import award from '../../assets/award.png';
 
 type AccoladeOptions = 'superbowl' | 'probowl' | 'mvp';
 

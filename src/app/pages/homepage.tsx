@@ -1,10 +1,10 @@
 'use client'
 import React, {useEffect, useState} from 'react';
-import YesNoButton from '@/components/yes-no-button';
+import YesNoButton from '@/app/components/yes-no-button';
 import PlayerVoteResults from '../components/player-vote-results';
-import { getPlayer } from '../api/players';
-import { postVote } from '../api/votes';
-import AccoladeIcon from '@/components/accolade-icon';
+import { getPlayer } from '../../api/players';
+import { postVote } from '../../api/votes';
+import AccoladeIcon from '../components/accolade-icon';
 import { useQuery } from '@tanstack/react-query';
 
 
@@ -200,4 +200,3 @@ const HomePage: React.FC = () => {
 }
 
 export default HomePage;
-

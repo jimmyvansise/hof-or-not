@@ -1,5 +1,5 @@
-import TopBar from "../components/topbar";
-import HomePage from "../pages/homepage";
+import TopBar from "./components/topbar";
+import HomePage from "./pages/homepage";
 
 export default function Home() {
   return (

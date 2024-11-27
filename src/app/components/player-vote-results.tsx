@@ -1,7 +1,7 @@
 'use client'
 import React, { MouseEventHandler } from 'react';
 import clsx from 'clsx';
-import WideButton from '../components/wide-button';
+import WideButton from './wide-button';
 
 type PlayerVoteResultsProps = {
     playerName: string;
