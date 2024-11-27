@@ -5,6 +5,8 @@ import PlayerVoteResults from '../components/player-vote-results';
 import { getPlayer } from '../api/players';
 import { postVote } from '../api/votes';
 import AccoladeIcon from '@/components/accolade-icon';
+import { useQuery } from '@tanstack/react-query';
+
 
 // for debugging, eventually delete
 /*
@@ -83,7 +85,7 @@ const renderPlayerImage = (data?: Player | null): JSX.Element | string => {
 }
 
 const renderPlayer = (
-  playerState: PlayerState, 
+  playerState: PlayerState,
   clickVoteTrue: React.MouseEventHandler<HTMLButtonElement>,
   clickVoteFalse: React.MouseEventHandler<HTMLButtonElement>,
 ): JSX.Element | string => {
@@ -175,24 +177,19 @@ const HomePage: React.FC = () => {
     }
   }
 
-  const fetchData = useCallback(async () => {
-    updatePlayerState({ isLoading: true });
+  const { error, data: player } = 
+    useQuery({ queryKey: ['player', playerState.currentPlayerIdx], 
+    queryFn: () => getPlayer(randomPlayers[playerState.currentPlayerIdx]),
+    retry: false
+  });
 
-    try {
-      // console.log('grabbing player at idx', playerState.currentPlayerIdx);
-      const player = await getPlayer(randomPlayers[playerState.currentPlayerIdx]);
-
-      updatePlayerState({ data: player });
-    } catch (error) {
-      console.error('Error fetching player data:', error);
-    } finally {
-      updatePlayerState({ isLoading: false });
-    }
-  }, [playerState.currentPlayerIdx]);
+  if (error) {
+    console.error('Error fetching player data:', error);
+  }
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    updatePlayerState({ data: player, isLoading: false });
+  }, [player]);
 
   return (
       <div className='flex flex-col items-center pt-4'>

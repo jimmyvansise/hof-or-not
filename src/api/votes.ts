@@ -10,9 +10,10 @@ export const postVote = async (playerId: number, hofChoice: boolean): Promise<Vo
         body: JSON.stringify({ playerId, hofChoice }),
         credentials: 'include'
     });
-    
-    const vote = await response.json();
-    // console.log('got data for postVote:', vote);
 
-    return vote;
+    if (!response.ok) {
+        throw new Error(`Failed to vote for player: ${playerId}`);
+    }
+
+    return response.json();
 };

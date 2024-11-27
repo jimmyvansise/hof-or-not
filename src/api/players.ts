@@ -8,9 +8,10 @@ export const getPlayer = async (playerId: number): Promise<Player> => {
             'Access-Control-Request-Method': 'GET',
         }
     });
-    
-    const player = await response.json();
-    // console.log('got data for getPlayer:', player);
 
-    return player;
+    if (!response.ok) {
+        throw new Error('Failed to fetch player data');
+    }
+
+    return response.json();
 };
