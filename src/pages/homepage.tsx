@@ -1,5 +1,5 @@
 'use client'
-import React, {useEffect, useCallback, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import YesNoButton from '@/components/yes-no-button';
 import PlayerVoteResults from '../components/player-vote-results';
 import { getPlayer } from '../api/players';
