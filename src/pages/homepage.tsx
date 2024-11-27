@@ -183,9 +183,7 @@ const HomePage: React.FC = () => {
     retry: false
   });
 
-  if (error) {
-    console.error('Error fetching player data:', error);
-  }
+  if (error) console.error(error);
 
   useEffect(() => {
     updatePlayerState({ data: player, isLoading: false });
