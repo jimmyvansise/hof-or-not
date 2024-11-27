@@ -170,9 +170,8 @@ const HomePage: React.FC = () => {
     try {
       const voteData = await postVote(randomPlayers[playerState.currentPlayerIdx], hofChoice);
       updatePlayerState({ isLoading: false, showVoteResults: true, voteData})
-      // console.log('vote data:', voteData);
     } catch (error) {
-      console.error('Error voting:', error);
+      console.error(error);
       updatePlayerState({ isLoading: false });
     }
   }
