@@ -7,7 +7,6 @@ import { postVote } from '../../api/votes';
 import AccoladeIcon from '../components/accolade-icon';
 import { useQuery } from '@tanstack/react-query';
 
-
 // for debugging, eventually delete
 /*
 const wait = (ms: number): Promise<void> => {
@@ -16,7 +15,7 @@ const wait = (ms: number): Promise<void> => {
 */
 
 // TODO: make a call that gets this number instead
-const TOTAL_PLAYERS = 15;
+const TOTAL_PLAYERS = 40;
 const LOAD_INDICATOR = false;
 
 interface PlayerState {
@@ -78,7 +77,7 @@ const renderPlayerImage = (data?: Player | null): JSX.Element | string => {
   return (
     <img
       className="absolute top-0 left-0 w-full h-full object-contain"
-      src={`data:image/jpeg;base64,${data.picture}`}
+      src={data.picture}
       alt="Player Image"
     />
   );
