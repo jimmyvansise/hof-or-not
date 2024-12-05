@@ -8,7 +8,7 @@ export const postVote = async (playerId: number, hofChoice: boolean): Promise<Vo
             'Access-Control-Request-Method': 'POST',
         },
         body: JSON.stringify({ playerId, hofChoice }),
-        credentials: 'include'
+        credentials: 'include' // to include cookie for userId
     });
 
     if (!response.ok) {
