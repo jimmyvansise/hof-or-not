@@ -5,6 +5,7 @@ import PlayerVoteResults from '../components/player-vote-results';
 import { getPlayer } from '../../api/players';
 import { postVote } from '../../api/votes';
 import AccoladeIcon from '../components/accolade-icon';
+import LinkButton from '../components/link-button';
 import { useQuery } from '@tanstack/react-query';
 
 // for debugging, eventually delete
@@ -63,10 +64,18 @@ const formatRetired = (yearRetired: number) => {
   return 'Current Player';
 }
 
-const formatPlayerName = (firstName: string | undefined, lastName: string | undefined) => {
+const formatPlayerName = (firstName: string | undefined, lastName: string | undefined, upperCase: boolean = true) => {
   if (!firstName || !lastName) return '';
 
-  return `${firstName.toUpperCase()} ${lastName.toUpperCase()}`;
+  if (upperCase) {
+    return `${firstName.toUpperCase()} ${lastName.toUpperCase()}`;
+  }
+
+  return `${firstName} ${lastName}`;
+}
+
+const getHighlightsHref = (playerState: PlayerState): string => {
+  return `https://www.youtube.com/results?search_query=${formatPlayerName(playerState.data?.firstName, playerState.data?.lastName, false)}+highlights`;
 }
 
 const renderPlayerImage = (data?: Player | null): JSX.Element | string => {
@@ -109,7 +118,10 @@ const renderPlayer = (
                   <AccoladeIcon accolade='probowl' amount={playerState.data ? playerState.data.proBowls : 0} />
                   <AccoladeIcon accolade='mvp' amount={playerState.data ? playerState.data.mvps : 0} />
                 </div>
-                <div className="flex pt-14 justify-between text-white font-montserrat text-sm italic">
+                <div className='flex justify-end pt-4'>
+                  <LinkButton href={getHighlightsHref(playerState)} />
+                </div>
+                <div className="flex pt-3 justify-between text-white font-montserrat text-sm italic">
                   <div className='text-left'>{playerState.data ? formatNickname(playerState.data.nickname) : ''}</div>
                   <div className='text-right'>{playerState.data ? formatRetired(playerState.data.yearRetired) : ''}</div>
                 </div>
@@ -178,7 +190,9 @@ const HomePage: React.FC = () => {
   const { error, data: player } = 
     useQuery({ queryKey: ['player', playerState.currentPlayerIdx], 
     queryFn: () => getPlayer(randomPlayers[playerState.currentPlayerIdx]),
-    retry: false
+    retry: false,
+    staleTime: 11 * 60 * 60 * 1000, // 11 hours
+    gcTime: 12 * 60 * 60 * 1000, // 12 hours
   });
 
   if (error) console.error(error);
