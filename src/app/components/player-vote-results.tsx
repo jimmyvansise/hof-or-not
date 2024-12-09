@@ -2,6 +2,9 @@
 import React, { MouseEventHandler } from 'react';
 import clsx from 'clsx';
 import WideButton from './wide-button';
+import Image from 'next/image';
+import greenSideStar from '../../assets/green-side-star.png';
+import redSideX from '../../assets/red-side-x.png';
 
 type PlayerVoteResultsProps = {
     playerName: string;
@@ -11,18 +14,20 @@ type PlayerVoteResultsProps = {
     onClickNext?: MouseEventHandler<HTMLButtonElement>;
 };
 
-const renderPlayerImage = (picture: string, hofBorderColor: string): JSX.Element | string => {
+const renderPlayerImage = (picture: string, sidePicture: string, hofBorderColor: string): JSX.Element | string => {
     if (!picture.length) {
       return '';
     }
   
     return (
-        <div className='absolute top-0 left-0 h-full w-full flex justify-center'>
+        <div className='absolute top-0 left-0 h-full w-full flex justify-around items-center'>
+            <Image src={sidePicture} alt="Side Image" className="w-4" />
             <img
                 className={clsx(`${hofBorderColor} border-4 h-full object-contain`)}
                 src={picture}
                 alt="Player Image"
             />
+            <Image src={sidePicture} alt="Side Image" className="w-4" />
         </div>
     );
   }
@@ -36,6 +41,7 @@ const PlayerVoteResults: React.FC<PlayerVoteResultsProps> = ({
 }) => {
     const hofTextColor = hofChoice ? 'text-hof-green' : 'text-hof-red';
     const hofBorderColor = hofChoice ? 'border-hof-green' : 'border-hof-red';
+    const sidePicture = hofChoice ? greenSideStar : redSideX;
 
     return (
         <>
@@ -45,7 +51,7 @@ const PlayerVoteResults: React.FC<PlayerVoteResultsProps> = ({
                         <div className={clsx(`${hofTextColor} text-lg`)}>{playerName}</div>
                     </div>
                     <div className='relative w-full h-2/6'>
-                        { renderPlayerImage(picture, hofBorderColor) }
+                        { renderPlayerImage(picture, sidePicture, hofBorderColor) }
                     </div>
                     <div className='flex h-1/6 items-center text-center text-white text-sm w-60'>
                         <div className="flex flex-col justify-center h-full w-1/2 bg-hof-green">

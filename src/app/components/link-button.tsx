@@ -19,7 +19,7 @@ const LinkButton: React.FC<LinkButtonProps> = ({
             href={href}
             target='_blank'
             rel="noopener noreferrer"
-            className={clsx(`${bgUrl} bg-cover bg-center w-8 h-8`)}
+            className={clsx(`${bgUrl} bg-cover bg-center w-8 h-8 rounded-md`)}
         />
     );
 }
