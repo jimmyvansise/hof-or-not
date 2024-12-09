@@ -2,7 +2,7 @@
 import React, { MouseEventHandler } from 'react';
 import clsx from 'clsx';
 import WideButton from './wide-button';
-import Image from 'next/image';
+import Image, { StaticImageData } from 'next/image';
 import greenSideStar from '../../assets/green-side-star.png';
 import redSideX from '../../assets/red-side-x.png';
 
@@ -14,20 +14,19 @@ type PlayerVoteResultsProps = {
     onClickNext?: MouseEventHandler<HTMLButtonElement>;
 };
 
-const renderPlayerImage = (picture: string, sidePicture: string, hofBorderColor: string): JSX.Element | string => {
+const renderPlayerImage = (picture: string, sidePicture: StaticImageData, hofBorderColor: string): JSX.Element | string => {
     if (!picture.length) {
       return '';
     }
-  
     return (
         <div className='absolute top-0 left-0 h-full w-full flex justify-around items-center'>
-            <Image src={sidePicture} alt="Side Image" className="w-4" />
+            <Image src={sidePicture} alt="Side Image" className="w-5" />
             <img
                 className={clsx(`${hofBorderColor} border-4 h-full object-contain`)}
                 src={picture}
                 alt="Player Image"
             />
-            <Image src={sidePicture} alt="Side Image" className="w-4" />
+            <Image src={sidePicture} alt="Side Image" className="w-5" />
         </div>
     );
   }
@@ -45,7 +44,7 @@ const PlayerVoteResults: React.FC<PlayerVoteResultsProps> = ({
 
     return (
         <>
-            <div className='w-full h-96 bg-hof-blue mb-4'>
+            <div className={clsx(`${hofBorderColor} border-2 w-full h-96 bg-hof-blue mb-4 shadow-[0px_0px_8px_2px_rgba(255,255,255,0.4)]`)}>
                 <div className='flex flex-col items-center font-alfa h-full'>
                     <div className='h-1/6'>
                         <div className={clsx(`${hofTextColor} text-lg`)}>{playerName}</div>
