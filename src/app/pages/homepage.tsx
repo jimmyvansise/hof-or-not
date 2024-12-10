@@ -16,7 +16,7 @@ const wait = (ms: number): Promise<void> => {
 */
 
 // TODO: make a call that gets this number instead
-const TOTAL_PLAYERS = 80;
+const TOTAL_PLAYERS = 100;
 const LOAD_INDICATOR = false;
 
 interface PlayerState {
