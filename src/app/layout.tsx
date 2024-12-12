@@ -16,18 +16,17 @@ export default function RootLayout({
   // Fonts go here, and also in tailwind.config.ts
   return (
     <Provider>
-      <head>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap" />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" />
-      </head>
-      <html lang="en">
-        
-        <body
-          className={`antialiased`}
-        >
-          {children}
-        </body>
-      </html>
+        <html lang="en">
+          <head>
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap" />
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" />
+          </head>
+          <body
+            className={`antialiased`}
+          >
+            {children}
+          </body>
+        </html>
     </Provider>
   );
 }
