@@ -2,11 +2,12 @@
 import React, {useEffect, useState} from 'react';
 import YesNoButton from '@/app/components/yes-no-button';
 import PlayerVoteResults from '../components/player-vote-results';
-import { getPlayer } from '../../api/players';
+import { getPlayer, getPlayerNames } from '../../api/players';
 import { postVote } from '../../api/votes';
 import AccoladeIcon from '../components/accolade-icon';
 import LinkButton from '../components/link-button';
 import { useQuery } from '@tanstack/react-query';
+import { usePathname, useRouter } from 'next/navigation';
 
 // for debugging, eventually delete
 /*
@@ -15,8 +16,6 @@ const wait = (ms: number): Promise<void> => {
 }
 */
 
-// TODO: make a call that gets this number instead
-const TOTAL_PLAYERS = 100;
 const LOAD_INDICATOR = false;
 
 interface PlayerState {
@@ -27,26 +26,7 @@ interface PlayerState {
   voteData: VoteAndResults | null,
 }
 
-const createUniqueRandomArray = (n: number) : number[] => {
-  const numbers: number[] = [];
-  const shuffledNumbers: number[] = [];
-
-  for (let i = 1; i <= TOTAL_PLAYERS; i++) {
-    numbers.push(i);
-  }
-
-  while (numbers.length > 0) {
-    const randomIndex = Math.floor(Math.random() * numbers.length);
-    shuffledNumbers.push(numbers[randomIndex]);
-    numbers.splice(randomIndex, 1);
-  }
-
-  return shuffledNumbers.slice(0, n);
-}
-
-const getNextIdx = (curIdx: number) : number => curIdx >= TOTAL_PLAYERS - 1 ? 0 : curIdx + 1;
-
-const randomPlayers = createUniqueRandomArray(TOTAL_PLAYERS);
+const getRandomIndex = (max: number) => Math.floor(Math.random() * max);
 
 const formatNickname = (nickname: string) => {
   if (nickname.length) {
@@ -156,10 +136,11 @@ const renderVoteResults = (playerState: PlayerState,
   );
 }
 
-const HomePage: React.FC = () => {
+const PlayerPage: React.FC = () => {
+  const router = useRouter();
   const [playerState, setPlayerState] = useState<PlayerState>({
     isLoading: true,
-    currentPlayerIdx: 0,
+    currentPlayerIdx: -1,
     data: null,
     showVoteResults: false,
     voteData: null,
@@ -172,33 +153,84 @@ const HomePage: React.FC = () => {
     }));
   };
 
-  const goToNextPlayer = () => {
-    updatePlayerState({ isLoading: true, data: null, showVoteResults: false, currentPlayerIdx: getNextIdx(playerState.currentPlayerIdx) });
+  const { error, data: playerNamesData } = 
+    useQuery({ queryKey: ['playerNames'], 
+    queryFn: () => getPlayerNames(),
+    retry: false,
+    staleTime: 1 * 60 * 60 * 1000, // 1 hour
+    gcTime: 2 * 60 * 60 * 1000, // 2 hours
+  });
+
+  let playerNamesMap: Record<number, string> = {};
+
+  if (error) {
+    console.error(error);
+  } else if (playerNamesData) {
+      playerNamesData.forEach((player) => {
+        playerNamesMap[player.playerId] = player.name.toLowerCase(); 
+      });
+      
+      if (playerState.currentPlayerIdx === -1) {
+        // console.log('setting idx initially');
+        updatePlayerState({
+          currentPlayerIdx: getRandomIndex(playerNamesData.length)
+        });
+      }
   }
+
+  const goToNextPlayer = () => {
+    const randomPlayerIdx = getRandomIndex(playerNamesData ? playerNamesData.length : 0);
+    const playerName = playerNamesMap[randomPlayerIdx];
+    router.push(`/players/${playerName}`);
+  }
+
+  const playerIds = Object.keys(playerNamesMap);
 
   const clickVote = async (hofChoice: boolean) => {
     updatePlayerState({ isLoading: true });
     try {
-      const voteData = await postVote(randomPlayers[playerState.currentPlayerIdx], hofChoice);
+      const voteData = await postVote(Number(playerIds[playerState.currentPlayerIdx]), hofChoice);
       updatePlayerState({ isLoading: false, showVoteResults: true, voteData})
     } catch (error) {
       console.error(error);
       updatePlayerState({ isLoading: false });
     }
   }
+  
+  let playerIdToGet = playerState.currentPlayerIdx > -1 ? Number(playerIds[playerState.currentPlayerIdx]) : null;
+  
+  const pathname = usePathname();
+  const playerName = pathname.split('/')[2];
+  if (playerName) {
+    // try and find the player by name
+    const foundId = playerIds.find(playerId => playerNamesMap[Number(playerId)] === playerName.toLowerCase());
+    
+    if (foundId) {
+      playerIdToGet = Number(foundId);
+    }
+  }
 
-  const { error, data: player } = 
-    useQuery({ queryKey: ['player', playerState.currentPlayerIdx], 
-    queryFn: () => getPlayer(randomPlayers[playerState.currentPlayerIdx]),
-    retry: false,
-    staleTime: 11 * 60 * 60 * 1000, // 11 hours
-    gcTime: 12 * 60 * 60 * 1000, // 12 hours
-  });
+  const { data: player, error: playerError } = 
+    useQuery({ 
+      queryKey: ['player', playerIdToGet], // Conditional query key
+      queryFn: () => playerIdToGet ? getPlayer(playerIdToGet) : null, // Only fetch if playerIdToGet exists
+      enabled: !!playerIdToGet,
+      retry: false,
+      staleTime: 11 * 60 * 60 * 1000, // 11 hours
+      gcTime: 12 * 60 * 60 * 1000, // 12 hours
+    });
 
-  if (error) console.error(error);
+  if (playerError) {
+    console.error(playerError);
+  }
 
   useEffect(() => {
-    updatePlayerState({ data: player, isLoading: false });
+    if (player) {
+      updatePlayerState({ 
+        data: player,
+        isLoading: false, 
+      });
+    }
   }, [player]);
 
   return (
@@ -212,4 +244,4 @@ const HomePage: React.FC = () => {
   );
 }
 
-export default HomePage;
+export default PlayerPage;

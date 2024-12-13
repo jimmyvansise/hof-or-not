@@ -15,3 +15,19 @@ export const getPlayer = async (playerId: number): Promise<Player> => {
 
     return response.json();
 };
+
+export const getPlayerNames = async (): Promise<PlayerName[]> => {
+    const response = await fetch(`${baseAddress}/names`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Request-Method': 'GET',
+        }
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch player names');
+    }
+
+    return response.json();
+};
