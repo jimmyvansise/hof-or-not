@@ -161,7 +161,7 @@ const PlayerPage: React.FC = () => {
     gcTime: 2 * 60 * 60 * 1000, // 2 hours
   });
 
-  let playerNamesMap: Record<number, string> = {};
+  const playerNamesMap: Record<number, string> = {};
 
   if (error) {
     console.error(error);
