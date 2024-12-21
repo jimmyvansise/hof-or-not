@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 import React, {useEffect, useState} from 'react';
 import YesNoButton from '@/app/components/yes-no-button';
@@ -20,13 +21,14 @@ const LOAD_INDICATOR = false;
 
 interface PlayerState {
   isLoading: boolean;
-  currentPlayerIdx: number;
+  currentPlayerId: number;
   data: Player | null;
+  playerNamesMap: Record<number, string>;
   showVoteResults: false,
   voteData: VoteAndResults | null,
 }
 
-const getRandomIndex = (max: number) => Math.floor(Math.random() * max);
+const getRandomPlayerId = (max: number) => Math.floor(Math.random() * max) + 1;
 
 const formatNickname = (nickname: string) => {
   if (nickname.length) {
@@ -140,7 +142,8 @@ const PlayerPage: React.FC = () => {
   const router = useRouter();
   const [playerState, setPlayerState] = useState<PlayerState>({
     isLoading: true,
-    currentPlayerIdx: -1,
+    currentPlayerId: -1,
+    playerNamesMap: {},
     data: null,
     showVoteResults: false,
     voteData: null,
@@ -161,60 +164,32 @@ const PlayerPage: React.FC = () => {
     gcTime: 2 * 60 * 60 * 1000, // 2 hours
   });
 
-  const playerNamesMap: Record<number, string> = {};
-
   if (error) {
     console.error(error);
-  } else if (playerNamesData) {
-      playerNamesData.forEach((player) => {
-        playerNamesMap[player.playerId] = player.name.toLowerCase(); 
-      });
-      
-      if (playerState.currentPlayerIdx === -1) {
-        // console.log('setting idx initially');
-        updatePlayerState({
-          currentPlayerIdx: getRandomIndex(playerNamesData.length)
-        });
-      }
   }
 
   const goToNextPlayer = () => {
-    const randomPlayerIdx = getRandomIndex(playerNamesData ? playerNamesData.length : 0);
-    const playerName = playerNamesMap[randomPlayerIdx];
+    const randomPlayerId = getRandomPlayerId(playerNamesData ? playerNamesData.length : 1);
+    const playerName = playerState.playerNamesMap[randomPlayerId];
     router.push(`/players/${playerName}`);
   }
-
-  const playerIds = Object.keys(playerNamesMap);
 
   const clickVote = async (hofChoice: boolean) => {
     updatePlayerState({ isLoading: true });
     try {
-      const voteData = await postVote(Number(playerIds[playerState.currentPlayerIdx]), hofChoice);
+      const voteData = await postVote(playerState.currentPlayerId, hofChoice);
       updatePlayerState({ isLoading: false, showVoteResults: true, voteData})
     } catch (error) {
       console.error(error);
       updatePlayerState({ isLoading: false });
     }
   }
-  
-  let playerIdToGet = playerState.currentPlayerIdx > -1 ? Number(playerIds[playerState.currentPlayerIdx]) : null;
-  
-  const pathname = usePathname();
-  const playerName = pathname.split('/')[2];
-  if (playerName) {
-    // try and find the player by name
-    const foundId = playerIds.find(playerId => playerNamesMap[Number(playerId)] === playerName.toLowerCase());
-    
-    if (foundId) {
-      playerIdToGet = Number(foundId);
-    }
-  }
 
   const { data: player, error: playerError } = 
     useQuery({ 
-      queryKey: ['player', playerIdToGet], // Conditional query key
-      queryFn: () => playerIdToGet ? getPlayer(playerIdToGet) : null, // Only fetch if playerIdToGet exists
-      enabled: !!playerIdToGet,
+      queryKey: ['player', playerState.currentPlayerId], // Conditional query key
+      queryFn: () => playerState.currentPlayerId > -1 ? getPlayer(playerState.currentPlayerId) : null, // Only fetch if playerIdToGet exists
+      enabled: playerState.currentPlayerId > -1,
       retry: false,
       staleTime: 11 * 60 * 60 * 1000, // 11 hours
       gcTime: 12 * 60 * 60 * 1000, // 12 hours
@@ -224,9 +199,45 @@ const PlayerPage: React.FC = () => {
     console.error(playerError);
   }
 
+  const pathname = usePathname();
+  const playerName = pathname.split('/')[2];
+
+  useEffect(() => {
+    if (playerNamesData) {
+      const playerNamesMap: Record<number, string> = {};
+
+      playerNamesData.forEach((player) => {
+        playerNamesMap[player.playerId] = player.name.toLowerCase(); 
+      });
+
+      const playerIds = Object.keys(playerNamesMap);
+      
+      if (playerState.currentPlayerId === -1) {
+        if (playerName) {
+          // try and find the player by name
+          const foundId = playerIds.find(playerId => playerNamesMap[Number(playerId)] === playerName.toLowerCase());
+          
+          if (foundId) {
+            updatePlayerState({
+              currentPlayerId: Number(foundId),
+              playerNamesMap,
+            });
+
+            return;
+          }
+        }
+        // random player
+        updatePlayerState({
+          currentPlayerId: getRandomPlayerId(playerNamesData.length),
+          playerNamesMap,
+        });
+      }
+    }
+  }, [playerNamesData]);
+
   useEffect(() => {
     if (player) {
-      updatePlayerState({ 
+      updatePlayerState({
         data: player,
         isLoading: false, 
       });
