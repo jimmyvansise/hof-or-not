@@ -17,8 +17,6 @@ const wait = (ms: number): Promise<void> => {
 }
 */
 
-const LOAD_INDICATOR = false;
-
 interface PlayerState {
   isLoading: boolean;
   currentPlayerId: number;
@@ -74,6 +72,7 @@ const renderPlayerImage = (data?: Player | null): JSX.Element | string => {
   );
 }
 
+// consider using playerState.isLoading to show indicator in future
 const renderPlayer = (
   playerState: PlayerState,
   clickVoteTrue: React.MouseEventHandler<HTMLButtonElement>,
@@ -82,35 +81,31 @@ const renderPlayer = (
   return (
     <>
       <div className='w-full h-96 bg-hof-gold'>
-        { LOAD_INDICATOR && playerState.isLoading ? 
-          <span>Loading...</span> 
-          :
-          <div className='flex flex-col h-full'>
-            <div className='flex justify-between px-2 pt-2'>
-              <div className="text-hof-dark-blue font-alfa text-lg">{formatPlayerName(playerState.data?.firstName, playerState.data?.lastName)}&nbsp;</div>
-              <div className="bg-hof-dark-blue text-hof-gold font-alfa text-lg px-1">{playerState.data?.position}</div>
+        <div className='flex flex-col h-full'>
+          <div className='flex justify-between px-2 pt-2'>
+            <div className="text-hof-dark-blue font-alfa text-lg">{formatPlayerName(playerState.data?.firstName, playerState.data?.lastName)}&nbsp;</div>
+            <div className="bg-hof-dark-blue text-hof-gold font-alfa text-lg px-1">{playerState.data?.position}</div>
+          </div>
+          <div className="bg-hof-dark-blue mx-2 mb-2 h-full">
+            <div className="relative w-full h-1/2">
+              { renderPlayerImage(playerState.data) }
             </div>
-            <div className="bg-hof-dark-blue mx-2 mb-2 h-full">
-              <div className="relative w-full h-1/2">
-                { renderPlayerImage(playerState.data) }
+            <div className='h-1/2 border-t-4 border-hof-gold flex flex-col p-2'>
+              <div className='flex justify-around'>
+                <AccoladeIcon accolade='superbowl' amount={playerState.data ? playerState.data.superBowlWins : 0} />
+                <AccoladeIcon accolade='probowl' amount={playerState.data ? playerState.data.proBowls : 0} />
+                <AccoladeIcon accolade='mvp' amount={playerState.data ? playerState.data.mvps : 0} />
               </div>
-              <div className='h-1/2 border-t-4 border-hof-gold flex flex-col p-2'>
-                <div className='flex justify-around'>
-                  <AccoladeIcon accolade='superbowl' amount={playerState.data ? playerState.data.superBowlWins : 0} />
-                  <AccoladeIcon accolade='probowl' amount={playerState.data ? playerState.data.proBowls : 0} />
-                  <AccoladeIcon accolade='mvp' amount={playerState.data ? playerState.data.mvps : 0} />
-                </div>
-                <div className='flex justify-end pt-4'>
-                  <LinkButton href={getHighlightsHref(playerState)} />
-                </div>
-                <div className="flex pt-3 justify-between text-white font-montserrat text-sm italic">
-                  <div className='text-left'>{playerState.data ? formatNickname(playerState.data.nickname) : ''}</div>
-                  <div className='text-right'>{playerState.data ? formatRetired(playerState.data.yearRetired) : ''}</div>
-                </div>
+              <div className='flex justify-end pt-4'>
+                <LinkButton href={getHighlightsHref(playerState)} />
+              </div>
+              <div className="flex pt-3 justify-between text-white font-montserrat text-sm italic">
+                <div className='text-left'>{playerState.data ? formatNickname(playerState.data.nickname) : ''}</div>
+                <div className='text-right'>{playerState.data ? formatRetired(playerState.data.yearRetired) : ''}</div>
               </div>
             </div>
           </div>
-        }
+        </div>
       </div>
         
       <div className='pt-4 w-full flex items-center justify-center'>
