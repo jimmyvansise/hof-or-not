@@ -30,9 +30,9 @@ const TopBar: React.FC<TopBarProps> = ({
   return (
     <header className={clsx(`${backgroundColor} border-b-4 border-hof-gold py-2 px-2`)}>
       <div className="flex items-center justify-between">
-        <div className="flex items-center w-full font-alfa">
-          <a onClick={clickCrown} className='w-16'>
-            <Image src={showText ? crownMedium : crownBlue} alt="Logo" className="h-8 w-8 cursor-pointer" />
+        <div className="flex items-center w-full font-alfa h-8">
+          <a onClick={clickCrown}>
+            <Image src={showText ? crownMedium : crownBlue} alt="Logo" className="w-8 cursor-pointer" />
           </a>
           { 
             showText ? 
@@ -42,13 +42,11 @@ const TopBar: React.FC<TopBarProps> = ({
                 <span className='text-hof-gold'> OR</span>
                 <span className='text-hof-red'> NOT</span>
               </h1>
-              <div className='mr-2 text-hof-gold text-sm w-full text-right'>THE PEOPLE&apos;S VOTE FOR THE HALL OF FAME</div>
             </>
             : ''
           }
           
         </div>
-        {/* Add navigation links or other elements here The People's Vote for the Hall of Fame */}
       </div>
     </header>
   );
