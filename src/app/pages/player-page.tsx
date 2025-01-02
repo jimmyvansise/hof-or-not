@@ -20,7 +20,7 @@ const wait = (ms: number): Promise<void> => {
 interface PlayerState {
   isLoading: boolean;
   currentPlayerId: number;
-  data: Player | null;
+  data: PlayerWithHofChoice | null;
   playerNamesMap: Record<number, string>;
   showVoteResults: false,
   voteData: VoteAndResults | null,
@@ -91,7 +91,7 @@ const renderPlayer = (
               { renderPlayerImage(playerState.data) }
             </div>
             <div className='h-1/2 border-t-4 border-hof-gold flex flex-col p-2'>
-              <div className='flex justify-around'>
+              <div className='flex justify-around pr-2'>
                 <AccoladeIcon accolade='superbowl' amount={playerState.data ? playerState.data.superBowlWins : 0} />
                 <AccoladeIcon accolade='probowl' amount={playerState.data ? playerState.data.proBowls : 0} />
                 <AccoladeIcon accolade='mvp' amount={playerState.data ? playerState.data.mvps : 0} />
@@ -110,10 +110,16 @@ const renderPlayer = (
         
       <div className='pt-4 w-full flex items-center justify-center'>
         <div className='pr-5'>
-          <YesNoButton typeYes onClick={clickVoteTrue} disabled={playerState.isLoading}/>
+          <YesNoButton typeYes 
+            onClick={clickVoteTrue} 
+            disabled={playerState.isLoading} 
+            selected={playerState.data && playerState.data.hofChoice !== null ? playerState.data.hofChoice : false}/>
         </div>
         <div className='pl-5'>
-          <YesNoButton typeYes={false} onClick={clickVoteFalse} disabled={playerState.isLoading}/>
+          <YesNoButton typeYes={false} 
+            onClick={clickVoteFalse} 
+            disabled={playerState.isLoading}
+            selected={playerState.data && playerState.data.hofChoice !== null ? !playerState.data.hofChoice : false}/>
         </div>
       </div>
       </>

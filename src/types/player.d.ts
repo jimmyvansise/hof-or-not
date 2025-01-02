@@ -10,3 +10,9 @@ type Player = {
     readonly yearRetired: number;
     readonly picture: string;
 };
+
+type HofChoice = {
+    readonly hofChoice: boolean | null;
+}
+
+type PlayerWithHofChoice = Player & HofChoice;

@@ -6,7 +6,8 @@ export const getPlayer = async (playerId: number): Promise<Player> => {
         headers: {
             'Content-Type': 'application/json',
             'Access-Control-Request-Method': 'GET',
-        }
+        },
+        credentials: 'include' // to include cookie for userId
     });
 
     if (!response.ok) {
