@@ -4,7 +4,7 @@ import "./globals.css";
 import Provider from "../utils/provider";
 
 export const metadata: Metadata = {
-  title: "HOF or Not",
+  title: "HOF or NOT",
   description: "You Decide Who Earns a Spot in the Hall Of Fame",
 };
 
@@ -20,6 +20,7 @@ export default function RootLayout({
           <head>
             <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap" />
             <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" />
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" />
           </head>
           <body
             className={`antialiased`}

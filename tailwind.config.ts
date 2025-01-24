@@ -19,6 +19,7 @@ const config: Config = {
       fontFamily: {
         alfa: ['Alfa Slab One', 'sans'],
         montserrat: ['Montserrat', 'sans'],
+        bebas: ['Bebas Neue', 'sans'],
       },
     },
   },
