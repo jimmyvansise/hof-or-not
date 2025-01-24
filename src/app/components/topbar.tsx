@@ -1,7 +1,6 @@
 'use client'
 import React from 'react';
 import Image from 'next/image';
-import crownMedium from '../../assets/crown-md.png';
 import crownBlue from '../../assets/crown-md-blue.png';
 import horizontalLogo from '../../assets/horizontal-logo.png';
 import { useRouter } from 'next/navigation';
