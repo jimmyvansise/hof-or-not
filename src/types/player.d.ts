@@ -15,4 +15,19 @@ type HofChoice = {
     readonly hofChoice: boolean | null;
 }
 
-type PlayerWithHofChoice = Player & HofChoice;
+type RelatedPlayers = {
+    readonly relatedPlayer1FirstName: string;
+    readonly relatedPlayer1LastName: string;
+    readonly relatedPlayer1Picture: string;
+    readonly relatedPlayer1HofYesPercent: number;
+    readonly relatedPlayer2FirstName: string;
+    readonly relatedPlayer2LastName: string;
+    readonly relatedPlayer2Picture: string;
+    readonly relatedPlayer2HofYesPercent: number;
+    readonly relatedPlayer3FirstName: string;
+    readonly relatedPlayer3LastName: string;
+    readonly relatedPlayer3Picture: string;
+    readonly relatedPlayer3HofYesPercent: number;
+}
+
+type PlayerWithHofChoiceRelatedPlayers = Player & HofChoice & RelatedPlayers;

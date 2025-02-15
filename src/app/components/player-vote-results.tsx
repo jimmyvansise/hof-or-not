@@ -1,7 +1,6 @@
 'use client'
-import React, { MouseEventHandler } from 'react';
+import React from 'react';
 import clsx from 'clsx';
-import WideButton from './wide-button';
 import Image, { StaticImageData } from 'next/image';
 import greenSideStar from '../../assets/green-side-star.png';
 import redSideX from '../../assets/red-side-x.png';
@@ -11,7 +10,6 @@ type PlayerVoteResultsProps = {
     picture: string;
     hofYesPercent: number;
     hofChoice?: boolean;
-    onClickNext?: MouseEventHandler<HTMLButtonElement>;
 };
 
 const renderPlayerImage = (picture: string, sidePicture: StaticImageData, hofBorderColor: string): JSX.Element | string => {
@@ -36,7 +34,6 @@ const PlayerVoteResults: React.FC<PlayerVoteResultsProps> = ({
     picture,
     hofYesPercent,
     hofChoice,
-    onClickNext,
 }) => {
     const hofTextColor = hofChoice ? 'text-hof-green' : 'text-hof-red';
     const hofBorderColor = hofChoice ? 'border-hof-green' : 'border-hof-red';
@@ -68,7 +65,6 @@ const PlayerVoteResults: React.FC<PlayerVoteResultsProps> = ({
                     </div>
                 </div>
             </div>
-            <WideButton text="NEXT" onClick={onClickNext} />
         </>
     );
 }

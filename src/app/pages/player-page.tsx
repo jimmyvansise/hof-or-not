@@ -6,8 +6,10 @@ import PlayerVoteResults from '../components/player-vote-results';
 import { getPlayer, getPlayerNames } from '../../api/players';
 import { postVote } from '../../api/votes';
 import AccoladeIcon from '../components/accolade-icon';
+import RelatedPlayerIcon from '../components/related-player-icon';
 import LinkButton from '../components/link-button';
-import { useQuery } from '@tanstack/react-query';
+import WideButton from '../components/wide-button';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { usePathname, useRouter } from 'next/navigation';
 
 // for debugging, eventually delete
@@ -20,7 +22,7 @@ const wait = (ms: number): Promise<void> => {
 interface PlayerState {
   isLoading: boolean;
   currentPlayerId: number;
-  data: PlayerWithHofChoice | null;
+  data: PlayerWithHofChoiceRelatedPlayers | null;
   playerNamesMap: Record<number, string>;
   showVoteResults: false,
   voteData: VoteAndResults | null,
@@ -77,7 +79,7 @@ const renderPlayer = (
   playerState: PlayerState,
   clickVoteTrue: React.MouseEventHandler<HTMLButtonElement>,
   clickVoteFalse: React.MouseEventHandler<HTMLButtonElement>,
-): JSX.Element | string => {
+): JSX.Element => {
   return (
     <>
       <div className='w-full h-96 bg-hof-gold'>
@@ -86,7 +88,7 @@ const renderPlayer = (
             <div className="text-hof-dark-blue font-alfa text-lg">{formatPlayerName(playerState.data?.firstName, playerState.data?.lastName)}&nbsp;</div>
             <div className="bg-hof-dark-blue text-hof-gold font-alfa text-lg px-1">{playerState.data?.position}</div>
           </div>
-          <div className="bg-hof-dark-blue mx-2 mb-2 h-full">
+          <div className="bg-hof-dark-blue mx-2 mb-1 h-full">
             <div className="relative w-full h-1/2">
               { renderPlayerImage(playerState.data) }
             </div>
@@ -108,7 +110,7 @@ const renderPlayer = (
         </div>
       </div>
         
-      <div className='pt-4 w-full flex items-center justify-center'>
+      <div className='py-2 w-full flex items-center justify-center border-hof-gold border-x-8 border-b-8'>
         <div className='pr-5'>
           <YesNoButton typeYes 
             onClick={clickVoteTrue} 
@@ -122,24 +124,68 @@ const renderPlayer = (
             selected={playerState.data && playerState.data.hofChoice !== null ? !playerState.data.hofChoice : false}/>
         </div>
       </div>
-      </>
+    </>
   );
 }
 
-const renderVoteResults = (playerState: PlayerState, 
-  onClickNext: React.MouseEventHandler<HTMLButtonElement>, 
-): JSX.Element | string => {
+const renderVoteResults = (playerState: PlayerState): JSX.Element => {
   return (
     <PlayerVoteResults 
       playerName={formatPlayerName(playerState.data?.firstName, playerState.data?.lastName)}
       picture={playerState.data ? playerState.data.picture : ''}
       hofChoice={playerState.voteData ? playerState.voteData.hofChoice : false}
-      hofYesPercent={playerState.voteData ? playerState.voteData.hofYesPercent : 0}
-      onClickNext={onClickNext} />
+      hofYesPercent={playerState.voteData ? playerState.voteData.hofYesPercent : 0} 
+    />
+  );
+}
+
+const renderRelatedPlayers = (playerState: PlayerState, 
+  onClickNext: React.MouseEventHandler<HTMLButtonElement>
+): JSX.Element => {
+  return (
+    <>
+      <div className='pt-2 flex flex-col w-full h-full'>
+          <div className="px-2 text-hof-gold font-bebas text-2xl">Related Players</div>
+          <div className='flex justify-around'>
+            <div className='pr-1'>
+              <RelatedPlayerIcon 
+                hofYesPercent={playerState.data ? playerState.data.relatedPlayer1HofYesPercent: 0}
+                playerName={formatPlayerName(playerState.data?.relatedPlayer1FirstName, playerState.data?.relatedPlayer1LastName)}
+                playerRoute={playerState.data ? 
+                  `${playerState.data.relatedPlayer1FirstName}${playerState.data.relatedPlayer1LastName}` 
+                  : ''}
+                picture={playerState.data ? playerState.data.relatedPlayer1Picture : ''}
+              />
+            </div>
+            <div className='pr-1'>
+              <RelatedPlayerIcon 
+                hofYesPercent={playerState.data ? playerState.data.relatedPlayer2HofYesPercent: 0}
+                playerName={formatPlayerName(playerState.data?.relatedPlayer2FirstName, playerState.data?.relatedPlayer2LastName)}
+                playerRoute={playerState.data ? 
+                  `${playerState.data.relatedPlayer2FirstName}${playerState.data.relatedPlayer2LastName}` 
+                  : ''}
+                picture={playerState.data ? playerState.data.relatedPlayer2Picture : ''}
+              />
+            </div>
+            <RelatedPlayerIcon 
+              hofYesPercent={playerState.data ? playerState.data.relatedPlayer3HofYesPercent: 0}
+              playerName={formatPlayerName(playerState.data?.relatedPlayer3FirstName, playerState.data?.relatedPlayer3LastName)}
+              playerRoute={playerState.data ? 
+                `${playerState.data.relatedPlayer3FirstName}${playerState.data.relatedPlayer3LastName}` 
+                : ''}
+              picture={playerState.data ? playerState.data.relatedPlayer3Picture : ''}
+            />
+          </div>
+      </div>
+      <div className='w-72 pt-4'>
+        <WideButton text="VIEW RANDOM PLAYER" onClick={onClickNext} />
+      </div>
+    </>
   );
 }
 
 const PlayerPage: React.FC = () => {
+  const queryClient = useQueryClient();
   const router = useRouter();
   const [playerState, setPlayerState] = useState<PlayerState>({
     isLoading: true,
@@ -172,14 +218,24 @@ const PlayerPage: React.FC = () => {
   const goToNextPlayer = () => {
     const randomPlayerId = getRandomPlayerId(playerNamesData ? playerNamesData.length : 1);
     const playerName = playerState.playerNamesMap[randomPlayerId];
+
     router.push(`/players/${playerName}`);
   }
 
   const clickVote = async (hofChoice: boolean) => {
     updatePlayerState({ isLoading: true });
+
     try {
       const voteData = await postVote(playerState.currentPlayerId, hofChoice);
-      updatePlayerState({ isLoading: false, showVoteResults: true, voteData})
+      updatePlayerState({ isLoading: false, showVoteResults: true, voteData});
+
+      if (playerState.data?.hofChoice !== null && 
+        voteData.hofChoice !== playerState.data?.hofChoice) {
+        // invalidate cache if they switch from false to true or the reverse only
+        queryClient.invalidateQueries({ 
+          queryKey: ['player', playerState.currentPlayerId] 
+        });
+      }
     } catch (error) {
       console.error(error);
       updatePlayerState({ isLoading: false });
@@ -250,8 +306,9 @@ const PlayerPage: React.FC = () => {
         { 
           !playerState.showVoteResults ?
           renderPlayer(playerState, () => clickVote(true), () => clickVote(false)) :
-          renderVoteResults(playerState, goToNextPlayer)
+          renderVoteResults(playerState)
         }
+        { renderRelatedPlayers(playerState, goToNextPlayer) }
       </div>
   );
 }

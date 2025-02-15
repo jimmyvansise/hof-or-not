@@ -34,7 +34,7 @@ const TopBar: React.FC<TopBarProps> = ({
           <a onClick={clickCrown}>
           { 
             showText ?
-              <Image src={horizontalLogo} alt="Logo" className="w-32 cursor-pointer"/>
+              <Image src={horizontalLogo} priority={true} alt="Logo" className="w-32 cursor-pointer"/>
             : <Image src={crownBlue} alt="Crown" className="w-8 cursor-pointer" />
           }
           </a>
