@@ -84,7 +84,7 @@ const renderPlayer = (
     <>
       <div className='w-full h-96 bg-hof-gold'>
         <div className='flex flex-col h-full'>
-          <div className='flex justify-between px-2 pt-2'>
+          <div className='flex justify-between px-2 pt-1'>
             <div className="text-hof-dark-blue font-alfa text-lg">{formatPlayerName(playerState.data?.firstName, playerState.data?.lastName)}&nbsp;</div>
             <div className="bg-hof-dark-blue text-hof-gold font-alfa text-lg px-1">{playerState.data?.position}</div>
           </div>
@@ -144,7 +144,7 @@ const renderRelatedPlayers = (playerState: PlayerState,
 ): JSX.Element => {
   return (
     <>
-      <div className='pt-2 flex flex-col w-full h-full'>
+      <div className='pt-1 flex flex-col w-full h-full'>
           <div className="px-2 text-hof-gold font-bebas text-2xl">Related Players</div>
           <div className='flex justify-around'>
             <div className='pr-1'>
@@ -177,7 +177,7 @@ const renderRelatedPlayers = (playerState: PlayerState,
             />
           </div>
       </div>
-      <div className='w-72 pt-4'>
+      <div className='w-72 pt-3'>
         <WideButton text="VIEW RANDOM PLAYER" onClick={onClickNext} />
       </div>
     </>
@@ -302,7 +302,7 @@ const PlayerPage: React.FC = () => {
   }, [player]);
 
   return (
-      <div className='flex flex-col items-center pt-4'>
+      <div className='flex flex-col items-center pt-3'>
         { 
           !playerState.showVoteResults ?
           renderPlayer(playerState, () => clickVote(true), () => clickVote(false)) :

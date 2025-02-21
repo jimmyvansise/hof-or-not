@@ -41,7 +41,7 @@ const PlayerVoteResults: React.FC<PlayerVoteResultsProps> = ({
 
     return (
         <>
-            <div className={clsx(`${hofBorderColor} border-2 w-full h-96 bg-hof-blue mb-4 shadow-[0px_0px_8px_2px_rgba(255,255,255,0.4)]`)}>
+            <div className={clsx(`${hofBorderColor} border-2 w-full h-96 bg-hof-blue mb-1 shadow-[0px_0px_8px_2px_rgba(255,255,255,0.4)]`)}>
                 <div className='flex flex-col items-center font-alfa h-full'>
                     <div className='h-1/6'>
                         <div className={clsx(`${hofTextColor} text-lg pt-4`)}>{playerName}</div>

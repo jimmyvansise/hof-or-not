@@ -44,8 +44,8 @@ const RelatedPlayerIcon: React.FC<RelatedPlayerIconProps> = ({
                     />
                 </div>
     
-                <div className='pt-1 text-center text-white font-bebas text-xs'>{playerName}</div>
-                <div className={clsx(`${hofTextColor} bg-white text-center font-bebas text-xs px-4 rounded-md`)}>
+                <div className='pt-1 text-center text-white font-bebas text-sm max-w-20 leading-none'>{playerName}</div>
+                <div className={clsx(`${hofTextColor} bg-white text-center font-bebas text-sm px-4 rounded-md`)}>
                     <div>{hofPercentText}</div>
                 </div>
             </Link>
